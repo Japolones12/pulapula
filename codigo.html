@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jogo de Pular</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+    canvas {
+      display: block;
+      background-color: #87CEEB;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="gameCanvas" width="800" height="400"></canvas>
+
+  <script>
+    // Inicializar variáveis
+    let canvas, ctx, player, gravity, isJumping;
+
+    // Iniciar o jogo
+    window.onload = function() {
+      canvas = document.getElementById("gameCanvas");
+      ctx = canvas.getContext("2d");
+
+      player = {
+        x: 50,
+        y: canvas.height - 100,
+        width: 50,
+        height: 50,
+        velocityY: 0,
+        jumping: false
+      };
+
+      gravity = 1.5;
+      isJumping = false;
+
+      // Definir intervalo de atualização do jogo
+      setInterval(update, 1000 / 60);
+
+      // Event listener para pular
+      document.addEventListener("keydown", function(event) {
+        if (event.code === "Space" && !isJumping) {
+          jump();
+        }
+      });
+    };
+
+    // Função para atualizar o jogo
+    function update() {
+      // Limpar o canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Desenhar o jogador
+      ctx.fillStyle = "#FF6347";
+      ctx.fillRect(player.x, player.y, player.width, player.height);
+
+      // Aplicar gravidade
+      player.y += player.velocityY;
+      player.velocityY += gravity;
+
+      // Verificar colisão com o chão
+      if (player.y + player.height > canvas.height) {
+        player.y = canvas.height - player.height;
+        player.velocityY = 0;
+        isJumping = false;
+      }
+    }
+
+    // Função para fazer o jogador pular
+    function jump() {
+      if (!isJumping) {
+        player.velocityY = -25;
+        isJumping = true;
+      }
+    }
+  </script>
+</body>
+</html>
